@@ -7,12 +7,13 @@ from http import HTTPStatus
 from itertools import chain
 from typing import Any, Generator, List, Mapping, Optional, Tuple
 
+import backoff
 import requests
 from airbyte_cdk.logger import AirbyteLogger
 from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import Stream
 from requests import HTTPError
-from source_hubspot.errors import HubspotInvalidAuth
+from source_hubspot.errors import HubspotInvalidAuth, HubspotServerError
 from source_hubspot.streams import (
     API,
     Campaigns,
@@ -94,12 +95,22 @@ class SourceHubspot(AbstractSource):
             error_msg = repr(e)
         return alive, error_msg
 
+    def retry_granted_scopes_handler(**kwargs):
+        """Retry helper when attempting to get scopes"""
+
+        return backoff.on_exception(
+            backoff.expo,
+            HubspotServerError,
+            **kwargs,
+        )
+
+    @retry_granted_scopes_handler
     def get_granted_scopes(self, authenticator):
         try:
             access_token = authenticator.get_access_token()
             url = f"https://api.hubapi.com/oauth/v1/access-tokens/{access_token}"
             response = requests.get(url=url)
-            response.raise_for_status()
+            response.raise_for_status() # cmm here retry
             response_json = response.json()
             granted_scopes = response_json["scopes"]
             return granted_scopes
@@ -181,7 +192,7 @@ class SourceHubspot(AbstractSource):
         api = API(credentials=credentials)
         if api.is_oauth2():
             authenticator = api.get_authenticator()
-            granted_scopes = self.get_granted_scopes(authenticator)
+            granted_scopes = self.get_granted_scopes(authenticator) //cmm here retry
             self.logger.info(f"The following scopes were granted: {granted_scopes}")
 
             available_streams = [stream for stream in streams if stream.scope_is_granted(granted_scopes)]

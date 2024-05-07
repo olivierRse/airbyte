@@ -36,6 +36,8 @@ class HubspotTimeout(HTTPError):
     you should pause your requests for a few seconds, then retry.
     """
 
+class HubspotServerError(HTTPError):
+    """500 Internal Server Error"""
 
 class HubspotInvalidAuth(HubspotError):
     """401 Unauthorized"""
