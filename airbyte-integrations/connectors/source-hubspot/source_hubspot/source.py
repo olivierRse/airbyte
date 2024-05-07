@@ -110,7 +110,7 @@ class SourceHubspot(AbstractSource):
             access_token = authenticator.get_access_token()
             url = f"https://api.hubapi.com/oauth/v1/access-tokens/{access_token}"
             response = requests.get(url=url)
-            response.raise_for_status() # cmm here retry
+            response.raise_for_status()
             response_json = response.json()
             granted_scopes = response_json["scopes"]
             return granted_scopes
@@ -192,7 +192,7 @@ class SourceHubspot(AbstractSource):
         api = API(credentials=credentials)
         if api.is_oauth2():
             authenticator = api.get_authenticator()
-            granted_scopes = self.get_granted_scopes(authenticator) //cmm here retry
+            granted_scopes = self.get_granted_scopes(authenticator)
             self.logger.info(f"The following scopes were granted: {granted_scopes}")
 
             available_streams = [stream for stream in streams if stream.scope_is_granted(granted_scopes)]
