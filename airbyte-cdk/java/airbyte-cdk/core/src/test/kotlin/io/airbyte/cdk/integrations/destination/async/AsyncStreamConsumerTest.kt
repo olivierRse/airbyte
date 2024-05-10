@@ -555,23 +555,22 @@ class AsyncStreamConsumerTest {
             ArgumentCaptor.captor()
         Mockito.verify(onClose).accept(any(), capture(captor))
         assertEquals(
-            // All streams have a COMPLETE status.
-            // TODO: change this to INCOMPLETE after we switch the default behavior.
+            // All streams have an INCOMPLETE status.
             mapOf(
                 StreamDescriptor().withNamespace(SCHEMA_NAME).withName(STREAM_NAME) to
                     StreamSyncSummary(
                         Optional.of(expectedRecords.size.toLong()),
-                        AirbyteStreamStatusTraceMessage.AirbyteStreamStatus.COMPLETE,
+                        AirbyteStreamStatusTraceMessage.AirbyteStreamStatus.INCOMPLETE,
                     ),
                 StreamDescriptor().withNamespace(SCHEMA_NAME).withName(STREAM_NAME2) to
                     StreamSyncSummary(
                         Optional.of(0),
-                        AirbyteStreamStatusTraceMessage.AirbyteStreamStatus.COMPLETE,
+                        AirbyteStreamStatusTraceMessage.AirbyteStreamStatus.INCOMPLETE,
                     ),
                 StreamDescriptor().withNamespace(DEFAULT_NAMESPACE).withName(STREAM_NAME3) to
                     StreamSyncSummary(
                         Optional.of(0),
-                        AirbyteStreamStatusTraceMessage.AirbyteStreamStatus.COMPLETE,
+                        AirbyteStreamStatusTraceMessage.AirbyteStreamStatus.INCOMPLETE,
                     ),
             ),
             captor.value,
