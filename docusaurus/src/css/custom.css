@@ -27,8 +27,11 @@
   --color-active-nav-item-text: var(--ifm-color-primary-darker);
 
   --color-grey-40: hsl(240, 25%, 98%);
+  --color-grey-100: hsl(240, 12%, 92%);
   --color-grey-400: hsl(240, 10%, 59%);
   --color-green-50: hsl(184, 67%, 92%);
+  --color-dark-blue-30: hsl(228, 45%, 98%);
+
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -47,6 +50,7 @@ html[data-theme="dark"] {
   --color-grey-40: hsl(240, 14%, 14%);
   --color-grey-400: hsl(240, 13%, 72%);
   --color-green-50: hsl(184, 100%, 12%);
+  --color-dark-blue-30: hsl(240, 56%, 9%);
 }
 
 .docusaurus-highlight-code-line {
