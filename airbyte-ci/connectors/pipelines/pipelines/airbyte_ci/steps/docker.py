@@ -8,6 +8,7 @@ import dagger
 from pipelines.dagger.actions.python.pipx import with_installed_pipx_package
 from pipelines.dagger.containers.python import with_python_base
 from pipelines.models.contexts.pipeline_context import PipelineContext
+from pipelines.models.secrets import Secret
 from pipelines.models.steps import MountPath, Step, StepResult
 
 
@@ -16,9 +17,9 @@ class SimpleDockerStep(Step):
         self,
         title: str,
         context: PipelineContext,
-        paths_to_mount: List[MountPath] = [],
-        internal_tools: List[MountPath] = [],
-        secrets: dict[str, dagger.Secret | None] = {},
+        paths_to_mount: Optional[List[MountPath]] = None,
+        internal_tools: Optional[List[MountPath]] = None,
+        secrets: Optional[List[Secret]] = None,
         env_variables: dict[str, str] = {},
         working_directory: str = "/",
         command: Optional[List[str]] = None,
@@ -30,7 +31,7 @@ class SimpleDockerStep(Step):
             context (PipelineContext): context of the step
             paths_to_mount (List[MountPath], optional): directory paths to mount. Defaults to [].
             internal_tools (List[MountPath], optional): internal tools to install. Defaults to [].
-            secrets (dict[str, dagger.Secret], optional): secrets to add to container. Defaults to {}.
+            secrets (List[Secret], optional): secrets to add to container. Defaults to [].
             env_variables (dict[str, str], optional): env variables to set in container. Defaults to {}.
             working_directory (str, optional): working directory to run the command in. Defaults to "/".
             command (Optional[List[str]], optional): The default command to run. Defaults to None.
@@ -38,10 +39,10 @@ class SimpleDockerStep(Step):
         self._title = title
         super().__init__(context)
 
-        self.paths_to_mount = paths_to_mount
+        self.paths_to_mount = paths_to_mount if paths_to_mount else []
         self.working_directory = working_directory
-        self.internal_tools = internal_tools
-        self.secrets = secrets
+        self.internal_tools = internal_tools if internal_tools else []
+        self.secrets = secrets if secrets else []
         self.env_variables = env_variables
         self.command = command
 
@@ -77,9 +78,8 @@ class SimpleDockerStep(Step):
         return container
 
     def _set_secrets(self, container: dagger.Container) -> dagger.Container:
-        for key, value in self.secrets.items():
-            if value is not None:
-                container = container.with_secret_variable(key, value)
+        for secret in self.secrets:
+            container = container.with_secret_variable(secret.name, secret.as_dagger_secret(self.context.dagger_client))
         return container
 
     async def init_container(self) -> dagger.Container:

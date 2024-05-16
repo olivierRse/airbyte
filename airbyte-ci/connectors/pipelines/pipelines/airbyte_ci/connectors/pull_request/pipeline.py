@@ -160,7 +160,7 @@ async def create_github_pull_request(
     if not context.ci_github_access_token:
         raise Exception("GitHub access token is required to create a pull request. Set the CI_GITHUB_ACCESS_TOKEN environment variable.")
 
-    g = Github(context.ci_github_access_token)
+    g = Github(context.ci_github_access_token.value)
     connector = context.connector
     connector_full_name = connector.technical_name
     logger = main_logger

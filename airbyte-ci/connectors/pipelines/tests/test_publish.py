@@ -21,8 +21,8 @@ def publish_context(mocker, dagger_client, tmpdir):
     return mocker.MagicMock(
         dagger_client=dagger_client,
         get_connector_dir=mocker.MagicMock(return_value=dagger_client.host().directory(str(tmpdir))),
-        docker_hub_username_secret=None,
-        docker_hub_password_secret=None,
+        docker_hub_username=None,
+        docker_hub_password=None,
         docker_image="hello-world:latest",
     )
 
@@ -98,7 +98,7 @@ class TestUploadSpecToCache:
                 mocker.ANY,
                 f"specs/{image_name.replace(':', '/')}/spec.json",
                 publish_context.spec_cache_bucket_name,
-                publish_context.spec_cache_gcs_credentials_secret,
+                publish_context.spec_cache_gcs_credentials,
                 flags=['--cache-control="no-cache"'],
             )
 
@@ -384,7 +384,7 @@ async def test_run_connector_python_registry_publish_pipeline(
     )
 
     context = mocker.MagicMock(
-        ci_gcs_credentials="",
+        ci_gcp_credentials="",
         pre_release=False,
         connector=mocker.MagicMock(
             code_directory="path/to/connector",

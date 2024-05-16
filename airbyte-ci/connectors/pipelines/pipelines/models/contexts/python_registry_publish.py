@@ -9,6 +9,7 @@ from typing import Optional, Type
 from pipelines.airbyte_ci.connectors.context import PipelineContext
 from pipelines.airbyte_ci.connectors.publish.context import PublishConnectorContext
 from pipelines.consts import DEFAULT_PYTHON_PACKAGE_REGISTRY_URL
+from pipelines.models.secrets import Secret
 
 
 @dataclass
@@ -35,7 +36,7 @@ class PythonRegistryPublishContext(PipelineContext):
         dagger_logs_url: Optional[str] = None,
         pipeline_start_timestamp: Optional[int] = None,
         ci_context: Optional[str] = None,
-        ci_gcs_credentials: Optional[str] = None,
+        ci_gcp_credentials: Optional[Secret] = None,
         package_name: Optional[str] = None,
         version: Optional[str] = None,
     ) -> None:
@@ -60,7 +61,7 @@ class PythonRegistryPublishContext(PipelineContext):
             dagger_logs_url=dagger_logs_url,
             pipeline_start_timestamp=pipeline_start_timestamp,
             ci_context=ci_context,
-            ci_gcs_credentials=ci_gcs_credentials,
+            ci_gcp_credentials=ci_gcp_credentials,
         )
 
     @classmethod
@@ -108,7 +109,7 @@ class PythonRegistryPublishContext(PipelineContext):
             dagger_logs_url=connector_context.dagger_logs_url,
             pipeline_start_timestamp=connector_context.pipeline_start_timestamp,
             ci_context=connector_context.ci_context,
-            ci_gcs_credentials=connector_context.ci_gcs_credentials,
+            ci_gcp_credentials=connector_context.ci_gcp_credentials,
         )
         pypi_context.dagger_client = connector_context.dagger_client
         return pypi_context

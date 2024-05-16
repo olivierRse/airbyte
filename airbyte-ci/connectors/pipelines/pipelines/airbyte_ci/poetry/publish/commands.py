@@ -86,7 +86,7 @@ async def publish(
         dagger_logs_url=ctx.obj.get("dagger_logs_url"),
         pipeline_start_timestamp=ctx.obj.get("pipeline_start_timestamp"),
         ci_context=ctx.obj.get("ci_context"),
-        ci_gcs_credentials=ctx.obj["ci_gcs_credentials"],
+        ci_gcp_credentials=ctx.obj["ci_gcp_credentials"],
         python_registry_token=python_registry_token,
         registry=python_registry_url,
         registry_check_url=DEFAULT_PYTHON_PACKAGE_REGISTRY_CHECK_URL,
