@@ -242,15 +242,16 @@ class BigQueryDestination : BaseConnector(), Destination {
                     parsedCatalog,
                     destinationHandler,
                     defaultNamespace,
-                    { destinationInitialStatus: DestinationInitialStatus<BigQueryDestinationState>
+                    { initialStatus: DestinationInitialStatus<BigQueryDestinationState>, disableTD
                         ->
                         StandardStreamOperation(
                             bigQueryLoadingStorageOperation,
-                            destinationInitialStatus,
-                            disableTypeDedupe,
+                            initialStatus,
+                            disableTD
                         )
                     },
                     migrations,
+                    disableTypeDedupe,
                 )
             return createDirectUploadConsumer(
                 outputRecordCollector,
@@ -281,16 +282,17 @@ class BigQueryDestination : BaseConnector(), Destination {
                 parsedCatalog,
                 destinationHandler,
                 defaultNamespace,
-                { destinationInitialStatus: DestinationInitialStatus<BigQueryDestinationState> ->
+                { initialStatus: DestinationInitialStatus<BigQueryDestinationState>, disableTD ->
                     StagingStreamOperations(
                         bigQueryGcsStorageOperations,
-                        destinationInitialStatus,
+                        initialStatus,
                         FileUploadFormat.CSV,
                         V2_WITHOUT_META,
-                        disableTypeDedupe
+                        disableTD
                     )
                 },
                 migrations,
+                disableTypeDedupe,
             )
         return createStagingConsumer(
             outputRecordCollector,
