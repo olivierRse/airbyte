@@ -227,12 +227,11 @@ class BigQueryDestination : BaseConnector(), Destination {
 
         if (uploadingMethod == UploadingMethod.STANDARD) {
             val bigQueryClientChunkSize = getBigQueryClientChunkSize(config)
-            val bigQueryFormatter = BigQueryRecordFormatter(BigQuerySQLNameTransformer())
             val bigQueryLoadingStorageOperation =
                 BigQueryDirectLoadingStorageOperation(
                     bigquery,
                     bigQueryClientChunkSize,
-                    bigQueryFormatter,
+                    BigQueryRecordFormatter(),
                     sqlGenerator,
                     destinationHandler,
                     datasetLocation,
@@ -242,15 +241,16 @@ class BigQueryDestination : BaseConnector(), Destination {
                     parsedCatalog,
                     destinationHandler,
                     defaultNamespace,
-                    { destinationInitialStatus: DestinationInitialStatus<BigQueryDestinationState>
+                    { initialStatus: DestinationInitialStatus<BigQueryDestinationState>, disableTD
                         ->
                         StandardStreamOperation(
                             bigQueryLoadingStorageOperation,
-                            destinationInitialStatus,
-                            disableTypeDedupe,
+                            initialStatus,
+                            disableTD
                         )
                     },
                     migrations,
+                    disableTypeDedupe,
                 )
             return createDirectUploadConsumer(
                 outputRecordCollector,
@@ -281,16 +281,17 @@ class BigQueryDestination : BaseConnector(), Destination {
                 parsedCatalog,
                 destinationHandler,
                 defaultNamespace,
-                { destinationInitialStatus: DestinationInitialStatus<BigQueryDestinationState> ->
+                { initialStatus: DestinationInitialStatus<BigQueryDestinationState>, disableTD ->
                     StagingStreamOperations(
                         bigQueryGcsStorageOperations,
-                        destinationInitialStatus,
+                        initialStatus,
                         FileUploadFormat.CSV,
                         V2_WITHOUT_META,
-                        disableTypeDedupe
+                        disableTD
                     )
                 },
                 migrations,
+                disableTypeDedupe,
             )
         return createStagingConsumer(
             outputRecordCollector,
