@@ -26,7 +26,8 @@ interface CsvSheetGenerator {
         id: UUID,
         formattedString: String,
         emittedAt: Long,
-        formattedAirbyteMetaString: String
+        formattedAirbyteMetaString: String,
+        generationId: Long = 0,
     ): List<Any>
 
     object Factory {

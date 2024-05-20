@@ -42,6 +42,7 @@ class StagingStreamOperations<DestinationState : MinimumDestinationState>(
                 it.accept(
                     record.serialized!!,
                     Jsons.serialize(record.record!!.meta),
+                    streamConfig.generationId,
                     record.record!!.emittedAt
                 )
             }
