@@ -287,7 +287,7 @@ class BigQueryDestination : BaseConnector(), Destination {
                         bigQueryGcsStorageOperations,
                         initialStatus,
                         FileUploadFormat.CSV,
-                        V2_WITHOUT_META,
+                        V2_WITH_GENERATION,
                         disableTD
                     )
                 },
