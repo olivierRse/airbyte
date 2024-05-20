@@ -19,4 +19,6 @@ interface DestinationHandler<DestinationState> {
 
     @Throws(Exception::class)
     fun commitDestinationStates(destinationStates: Map<StreamId, DestinationState>)
+
+    fun createNamespaces(schemas: Set<String>)
 }
