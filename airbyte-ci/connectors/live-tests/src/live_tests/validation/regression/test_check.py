@@ -8,7 +8,7 @@ from airbyte_protocol.models import Status, Type  # type: ignore
 from live_tests.commons.models import ExecutionResult
 from live_tests.regression_tests.consts import MAX_LINES_IN_REPORT
 
-from .utils import fail_test_on_failing_execution_results, tail_file
+from live_tests.validation.utils import fail_test_on_failing_execution_results, tail_file
 
 pytestmark = [
     pytest.mark.anyio,

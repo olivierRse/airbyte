@@ -14,9 +14,8 @@ from typing import TYPE_CHECKING, Any, Optional
 import requests
 import yaml
 from jinja2 import Environment, PackageLoader, select_autoescape
-from live_tests.regression_tests import stash_keys
-
-from .consts import MAX_LINES_IN_REPORT
+from live_tests.validation import stash_keys
+from live_tests.validation.consts import MAX_LINES_IN_REPORT
 
 if TYPE_CHECKING:
     import pytest
@@ -89,7 +88,7 @@ class Report:
 
     def render(self) -> None:
         jinja_env = Environment(
-            loader=PackageLoader(__package__, "templates"),
+            loader=PackageLoader(__package__, "regression/templates"),
             autoescape=select_autoescape(),
             trim_blocks=False,
             lstrip_blocks=True,

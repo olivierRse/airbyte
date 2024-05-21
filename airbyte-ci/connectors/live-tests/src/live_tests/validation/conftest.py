@@ -30,7 +30,7 @@ from live_tests.commons.models import (
 from live_tests.commons.secret_access import get_airbyte_api_key
 from live_tests.commons.segment_tracking import track_usage
 from live_tests.commons.utils import build_connection_url, clean_up_artifacts
-from live_tests.regression_tests import stash_keys
+from live_tests.validation import stash_keys
 from rich.prompt import Confirm, Prompt
 
 from .report import Report, ReportState
@@ -42,7 +42,7 @@ if TYPE_CHECKING:
     from pytest_sugar import SugarTerminalReporter  # type: ignore
 
 ## CONSTS
-LOGGER = logging.getLogger("regression_tests")
+LOGGER = logging.getLogger("regression")
 MAIN_OUTPUT_DIRECTORY = Path("/tmp/regression_tests_artifacts")
 
 # It's used by Dagger and its very verbose

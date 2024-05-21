@@ -12,8 +12,8 @@ from airbyte_protocol.models import AirbyteMessage, Type  # type: ignore
 from deepdiff import DeepDiff  # type: ignore
 from live_tests.commons.models import ExecutionResult
 
-from . import stash_keys
-from .consts import MAX_LINES_IN_REPORT
+from live_tests.validation import stash_keys
+from live_tests.validation.consts import MAX_LINES_IN_REPORT
 
 if TYPE_CHECKING:
     from _pytest.fixtures import SubRequest

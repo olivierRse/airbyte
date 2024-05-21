@@ -9,7 +9,7 @@ from _pytest.fixtures import SubRequest
 from airbyte_protocol.models import AirbyteCatalog, AirbyteStream, Type  # type: ignore
 from live_tests.commons.models import ExecutionResult
 
-from .utils import fail_test_on_failing_execution_results, get_and_write_diff
+from live_tests.validation.utils import fail_test_on_failing_execution_results, get_and_write_diff
 
 pytestmark = [
     pytest.mark.anyio,
